@@ -28,6 +28,10 @@ void calcIndegree(int n) {
             }
         }
     }
+    printf("Initial indegrees - \n");
+    for (int i = 0; i<n; i++){
+        printf("%c : %d\n", i+'A', indegree[i]);
+    }
 }
 
 void toposort(int n) {
