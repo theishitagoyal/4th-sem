@@ -5,7 +5,7 @@
 int x[20];
 
 int place(int k, int i) {
-    int j;
+    int j; //j=row
     for (j = 1; j <= k - 1; j++) {
         if (x[j] == i || abs(x[j] - i) == abs(j - k))
             return 0;
