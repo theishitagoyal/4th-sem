@@ -10,10 +10,10 @@ int partition(int A[MAX], int l, int r){
     int i = l+1;
     int j = r;
     while (1){
-        while (pivot<A[i] && i<=j){
+        while (A[i]<=pivot && i<=j){
             i++;
         }
-        while (pivot>A[j]){
+        while (A[j]>pivot){
             j--;
         }
         if (i<j){
