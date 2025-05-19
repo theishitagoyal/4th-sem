@@ -56,5 +56,3 @@ y_valid = (valid.iloc[:, -1].values)
 y_predict = (model.predict(x_valid))
 print((y_predict), (y_valid))
 print(accuracy_score(list(y_predict), list(y_valid)))
-
-
