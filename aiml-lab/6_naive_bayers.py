@@ -10,21 +10,15 @@ class NaiveBayes:
         self.features_prob = {}
 
     def fit(self, x, Y):
-        # Calculate class frequency
-        for value in Y:
+        for value in Y: # Calculate class frequency
             if value in self.class_prob.keys():
                 self.class_prob[value] += 1
             else:
                 self.class_prob[value] = 1
-
         total_samples = len(Y)
-
-        # Calculate class probabilities
-        for key in self.class_prob:
+        for key in self.class_prob: # Calculate class probabilities
             self.class_prob[key] = self.class_prob[key] / total_samples
-
-        # Calculate feature probabilities with Laplace smoothing
-        for c in self.class_prob.keys():
+        for c in self.class_prob.keys(): # Calculate feature probabilities with Laplace smoothing
             self.features_prob[c] = {}
             class_rows = x[Y == c]
             for feature in x.columns:
@@ -34,8 +28,7 @@ class NaiveBayes:
                 num_unique = len(unique_values)
                 for value in unique_values:
                     count = np.sum(class_rows[feature] == value)
-                    # Laplace smoothing
-                    self.features_prob[c][feature][value] = (count + 1) / (total + num_unique)
+                    self.features_prob[c][feature][value] = (count + 1) / (total + num_unique) # Laplace smoothing
 
     def predict(self, x):
         predictions = []
@@ -50,43 +43,30 @@ class NaiveBayes:
                     if value in self.features_prob[c][feature]:
                         log_prob += math.log(self.features_prob[c][feature][value])
                     else:
-                        # Small probability for unseen values
-                        log_prob += math.log(1e-6)
+                        log_prob += math.log(1e-6) # Small probability for unseen values
                 if log_prob > max_log_prob:
                     max_log_prob = log_prob
                     predicted_class = c
             predictions.append(predicted_class)
         return predictions
 
-# Load and preprocess the data
 data = pd.read_csv("C:\\old sys\\users-ig134\\projects\\helloworld\\aiml\\Social_Network_Ads.csv")
 data["Gender"] = np.where(data["Gender"] == 'Male', 1, 0)
-
 X = data.iloc[:, 1:4]
 y = data['Purchased']
-
-# Train-test split
 X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-
-# Train the model
 model = NaiveBayes()
 model.fit(X_train, Y_train)
-
-# Predict on test data
 Y_pred = model.predict(X_test)
-
-# Evaluate
 accuracy = accuracy_score(Y_test, Y_pred)
 precision = precision_score(Y_test, Y_pred)
 recall = recall_score(Y_test, Y_pred)
 f1 = f1_score(Y_test, Y_pred)
-
 print("Validation Set Metrics:")
 print("Accuracy: {:.2f}".format(accuracy))
 print("Precision: {:.2f}".format(precision))
 print("Recall: {:.2f}".format(recall))
 print("F1 Score: {:.2f}".format(f1))
-
 confusion = confusion_matrix(Y_test, Y_pred)
 print("Confusion Matrix:")
 print(confusion)
@@ -94,29 +74,21 @@ print("Class 0 predicted correctly : ", confusion[0][0])
 print("Class 0 predicted incorrectly : ", confusion[0][1])
 print("Class 1 predicted incorrectly : ", confusion[1][0])
 print("Class 1 predicted correctly : ", confusion[1][1])
-
-# Validate on a random sample
 valid = data.sample(n=20)
 X_valid = valid.iloc[:, 1:4]
 y_valid = valid['Purchased']
-
 y_val_pred = model.predict(X_valid)
-
 accuracy_val = accuracy_score(y_valid, y_val_pred)
 precision_val = precision_score(y_valid, y_val_pred)
 recall_val = recall_score(y_valid, y_val_pred)
 f1_val = f1_score(y_valid, y_val_pred)
-
 print("\nRandom Validation Sample Metrics:")
 print("Accuracy: {:.2f}".format(accuracy_val))
 print("Precision: {:.2f}".format(precision_val))
 print("Recall: {:.2f}".format(recall_val))
 print("F1 Score: {:.2f}".format(f1_val))
-
-# Predict on new data
 a = pd.DataFrame()
 a["Gender"] = [1]  # Male
 a["Age"] = [30]
 a["EstimatedSalary"] = [50000]
-
 print("\nPrediction for new input:", model.predict(a))
