@@ -8,11 +8,8 @@ class KMeansCustom:
 
     def initialize_centroids(self, data):
         random_indices = np.random.randint(data.shape[0], size=self.n_clusters)
-        print("hello")
-        print("data")
-        print(data.shape)
         centroids = data[random_indices]
-        print(f"this is the f{centroids}")
+        print(f"Initial centroids-\nf{centroids}")
         return centroids
 
     def assign_to_clusters(self, data, centroids):
@@ -28,7 +25,6 @@ class KMeansCustom:
 
     def update_centroids(self, data, clusters):
         new_centroids = []
-
         for i in range(self.n_clusters):
             centroid_sum = [0] * len(data[0])  # list of zeroes
             count = 0
@@ -57,24 +53,18 @@ class KMeansCustom:
         self.cen = centroids
         self.lab = clusters
 
-
-
 iris = pd.read_csv('C:\\old sys\\users-ig134\\projects\\helloworld\\aiml\\iris_csv (1).csv')
 data = iris.iloc[:, 2:4].values
 iris['class'].unique()
-data.shape
-data[3]
 k = 4
 model = KMeansCustom(n_clusters=k)
 model.fit(data)
 plt.scatter(data[:, 0], data[:, 1], c=model.lab)
 centroids_array = np.array(model.cen)  # Convert centroids to a NumPy array
+print("New centroids-")
 print(centroids_array)
 plt.scatter(centroids_array[:, 0], centroids_array[:, 1],marker='X',s=400, c='red')
 plt.xlabel('Petal Length (cm)')
 plt.ylabel('Petal Width (cm)')
 plt.title('Custom K-means Clustering on Iris Dataset')
 plt.show()
-
-
-
